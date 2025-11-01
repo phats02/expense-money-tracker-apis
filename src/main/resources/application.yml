@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ExpenseMoneyTracker
+  datasource:
+    url: jdbc:postgresql://localhost:5432/express-money-tracker-db
+    username: admin
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
