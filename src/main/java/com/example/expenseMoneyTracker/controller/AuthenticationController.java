@@ -5,6 +5,7 @@ import com.example.expenseMoneyTracker.dto.LoginRequest;
 import com.example.expenseMoneyTracker.dto.LoginResponse;
 import com.example.expenseMoneyTracker.dto.SuccessResponse;
 import com.example.expenseMoneyTracker.provider.JwtTokenProvider;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequestMapping("/api")
+@Tag(name="Auth service")
 public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
