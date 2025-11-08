@@ -1,11 +1,8 @@
 package com.example.expenseMoneyTracker.controller;
 
-import com.example.expenseMoneyTracker.service.AIChatService;
-import com.google.genai.Client;
-import com.google.genai.types.GenerateContentResponse;
+import com.ferb.expenseMoneyTracker.service.AIChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
