@@ -5,6 +5,7 @@ import com.example.expenseMoneyTracker.dto.LoginRequest;
 import com.example.expenseMoneyTracker.dto.LoginResponse;
 import com.example.expenseMoneyTracker.dto.SuccessResponse;
 import com.example.expenseMoneyTracker.provider.JwtTokenProvider;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class AuthenticationController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @Operation(summary = "Login with username and password")
     @PostMapping("/auth/login/password")
     public SuccessResponse<LoginResponse> loginWithUsernamePassword(@Valid @RequestBody LoginRequest loginRequest) {
 

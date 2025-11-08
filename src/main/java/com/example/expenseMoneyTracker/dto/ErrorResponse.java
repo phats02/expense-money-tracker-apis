@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class ErrorResponse {
+public class ErrorResponse<T> {
     private ErrorType type;
-    private String message;
+    private T message;
     private final boolean success= false;
 }

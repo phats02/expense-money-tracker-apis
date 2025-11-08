@@ -22,7 +22,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException {
 
-        ErrorResponse error = new ErrorResponse(
+        ErrorResponse<String> error = new ErrorResponse<>(
                 ErrorType.FORBIDDEN,
                 "Access denied. You don't have permission."
         );

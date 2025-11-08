@@ -21,7 +21,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
 
-        ErrorResponse error = new ErrorResponse(
+        ErrorResponse<String> error = new ErrorResponse<>(
                 ErrorType.FORBIDDEN,
                 "Authentication required. Please login."
         );
