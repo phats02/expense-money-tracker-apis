@@ -1,5 +1,6 @@
 package com.ferb.expenseMoneyTracker.controller;
 
+import com.ferb.expenseMoneyTracker.annotations.ToLowerCase;
 import com.ferb.expenseMoneyTracker.dto.*;
 import com.ferb.expenseMoneyTracker.entity.User;
 import com.ferb.expenseMoneyTracker.enums.SignUpMethod;
@@ -9,21 +10,17 @@ import com.ferb.expenseMoneyTracker.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Slf4j
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @Tag(name="Auth service")
 public class AuthenticationController {
     @Autowired
@@ -66,6 +63,12 @@ public class AuthenticationController {
         String token = jwtTokenProvider.generateToken(new CustomUserDetail(insertedUser));
 
         return new SuccessResponse<>(new LoginResponse(token));
+    }
+
+    @Operation(summary = "Check is email available to signup")
+    @GetMapping("/auth/isEmailAvailable")
+    public SuccessResponse<Boolean> isEmailAvailable( @Valid @RequestParam(name = "email", required = true) @Email @ToLowerCase String email) {
+        return new SuccessResponse<Boolean>(!userService.isEmailExist(email));
     }
 
 }
