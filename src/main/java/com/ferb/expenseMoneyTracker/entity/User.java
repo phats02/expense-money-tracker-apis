@@ -3,9 +3,7 @@ package com.ferb.expenseMoneyTracker.entity;
 import com.ferb.expenseMoneyTracker.abstracts.Auditable;
 import com.ferb.expenseMoneyTracker.enums.SignUpMethod;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -14,6 +12,9 @@ import java.util.UUID;
 @Table(name = "users")
 @ToString
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

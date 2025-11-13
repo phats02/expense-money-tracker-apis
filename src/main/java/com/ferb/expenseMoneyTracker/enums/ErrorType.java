@@ -8,7 +8,9 @@ public enum ErrorType {
     SERVER_ERROR("Server error"),
     INVALID_AUTH_TOKEN("Invalid auth token"),
     MALFORMED_TOKEN("Malformed token"),
-    FORBIDDEN("Forbidden");
+    FORBIDDEN("Forbidden"),
+    FIELD_ALREADY_EXISTED("Field already existed")
+    ;
 
     private final String description;
     ErrorType(String description){

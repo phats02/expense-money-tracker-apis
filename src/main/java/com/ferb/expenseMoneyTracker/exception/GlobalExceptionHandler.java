@@ -71,6 +71,12 @@ public class GlobalExceptionHandler {
         return new ErrorResponse<>(ErrorType.INVALID_REQUEST, "Bad request");
     }
 
+    @ExceptionHandler(FieldAlreadyExisted.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse<String> handleFieldAlreadyExisted(FieldAlreadyExisted ex) {
+        return  new ErrorResponse<>(ErrorType.FIELD_ALREADY_EXISTED, ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse<String> handleRestExceptions(Exception ex) {

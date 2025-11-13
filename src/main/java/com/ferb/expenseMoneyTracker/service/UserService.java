@@ -24,4 +24,12 @@ public class UserService implements UserDetailsService {
         }
         return new CustomUserDetail(user);
     }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public boolean isEmailExist(String email) {
+        return userRepository.existsByName(email);
+    }
 }
