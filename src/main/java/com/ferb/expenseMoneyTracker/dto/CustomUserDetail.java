@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,6 +29,10 @@ public class CustomUserDetail implements UserDetails {
     @Override
     public String getUsername() {
         return user.getEmail();
+    }
+
+    public UUID getUserId() {
+        return user.getId();
     }
 
     @Override

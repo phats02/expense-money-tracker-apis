@@ -1,9 +1,9 @@
 package com.ferb.expenseMoneyTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ferb.expenseMoneyTracker.abstracts.Auditable;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -12,6 +12,9 @@ import java.util.UUID;
 @Table(name="wallets")
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Wallet extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,6 +32,7 @@ public class Wallet extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User owner;
 
     @Column(nullable = true)

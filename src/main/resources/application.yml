@@ -1,5 +1,9 @@
 app:
   jwtSecret: lucky_7seven_lucky_7seven_lucky_7seven_lucky_7seven
+org:
+  slf4j:
+    simpleLogger:
+      defaultLogLevel: debug
 spring:
   application:
     name: ExpenseMoneyTracker

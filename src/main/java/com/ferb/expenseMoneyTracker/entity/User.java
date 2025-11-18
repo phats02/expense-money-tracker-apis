@@ -1,5 +1,6 @@
 package com.ferb.expenseMoneyTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ferb.expenseMoneyTracker.abstracts.Auditable;
 import com.ferb.expenseMoneyTracker.enums.SignUpMethod;
 import jakarta.persistence.*;
@@ -24,6 +25,7 @@ public class User extends Auditable {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)

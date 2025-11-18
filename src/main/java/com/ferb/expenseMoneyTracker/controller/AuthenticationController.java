@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,6 +47,7 @@ public class AuthenticationController {
 
     @Operation(summary = "Signup with email and password")
     @PostMapping("/auth/signup/password")
+    @ResponseStatus(HttpStatus.CREATED)
     public SuccessResponse<LoginResponse> signupWithEmailPassword(@Valid @RequestBody SignupByPasswordRequest signupByPasswordRequest) {
         if (userService.isEmailExist(signupByPasswordRequest.getEmail())) {
             throw new FieldAlreadyExisted("Email");

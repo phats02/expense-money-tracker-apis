@@ -77,6 +77,12 @@ public class GlobalExceptionHandler {
         return  new ErrorResponse<>(ErrorType.FIELD_ALREADY_EXISTED, ex.getMessage());
     }
 
+    @ExceptionHandler(NotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse<String> handleNotFound(NotFound ex) {
+        return new ErrorResponse<>(ErrorType.RESOURCE_NOT_FOUND, ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse<String> handleRestExceptions(Exception ex) {
