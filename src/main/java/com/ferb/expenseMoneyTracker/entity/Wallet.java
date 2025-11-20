@@ -1,5 +1,6 @@
 package com.ferb.expenseMoneyTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ferb.expenseMoneyTracker.abstracts.Auditable;
 import jakarta.persistence.*;
@@ -32,7 +33,7 @@ public class Wallet extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIdentityReference(alwaysAsId = true)
     private User owner;
 
     @Column(nullable = true)

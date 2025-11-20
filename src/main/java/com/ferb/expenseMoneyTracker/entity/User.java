@@ -1,6 +1,8 @@
 package com.ferb.expenseMoneyTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ferb.expenseMoneyTracker.abstracts.Auditable;
 import com.ferb.expenseMoneyTracker.enums.SignUpMethod;
 import jakarta.persistence.*;
@@ -16,6 +18,10 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class User extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

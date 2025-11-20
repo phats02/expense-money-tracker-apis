@@ -83,6 +83,12 @@ public class GlobalExceptionHandler {
         return new ErrorResponse<>(ErrorType.RESOURCE_NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse<String> handleBusinessException(BusinessException ex) {
+        return new ErrorResponse<>(ErrorType.RESOURCE_NOT_FOUND, ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse<String> handleRestExceptions(Exception ex) {
