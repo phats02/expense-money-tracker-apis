@@ -8,6 +8,7 @@ import com.ferb.expenseMoneyTracker.enums.SignUpMethod;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.ZoneId;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
@@ -37,4 +38,16 @@ public class User extends Auditable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SignUpMethod signUpMethod;
+
+    @Column(nullable = false)
+    private String timezone = "Asia/Ho_Chi_Minh";
+
+    public ZoneId getTimeZoneId() {
+        return ZoneId.of(timezone);
+    }
+
+    public void setTimeZone(String timezone) {
+        ZoneId.of(timezone);
+        this.timezone = timezone;
+    }
 }
