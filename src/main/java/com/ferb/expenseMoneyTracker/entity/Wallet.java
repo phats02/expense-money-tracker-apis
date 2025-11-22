@@ -1,7 +1,9 @@
 package com.ferb.expenseMoneyTracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ferb.expenseMoneyTracker.abstracts.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,6 +18,10 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Wallet extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

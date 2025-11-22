@@ -2,6 +2,7 @@ package com.ferb.expenseMoneyTracker.dto;
 
 import com.ferb.expenseMoneyTracker.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class CustomUserDetail implements UserDetails {
     User user;
 
