@@ -18,18 +18,13 @@ import java.util.UUID;
 public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
-    @Autowired
-    UserService userService;
 
 
-    public List<Category> getByOwnerEmail(String ownerEmail) {
-        User owner =userService.findOneUserByEmail(ownerEmail);
-
+    public List<Category> getByOwnerEmail(User owner) {
         return categoryRepository.getByOwner(owner);
     }
 
-    public Category createNewCategory(CreateCategoryRequest dto, String ownerEmail) {
-        User owner =userService.findOneUserByEmail(ownerEmail);
+    public Category createNewCategory(CreateCategoryRequest dto, User owner) {
         Category parent = null;
         if (dto.getParentId() != null) {
             parent=  categoryRepository.getByIdAndOwner(dto.getParentId(), owner);
@@ -51,8 +46,7 @@ public class CategoryService {
         return categoryRepository.save(newCategory);
     }
 
-    public Category updateCategory(UUID categoryId, UpdateCategoryRequest dto, String ownerEmail) {
-        User owner =userService.findOneUserByEmail(ownerEmail);
+    public Category updateCategory(UUID categoryId, UpdateCategoryRequest dto, User owner) {
 
         Category category = categoryRepository.getByIdAndOwner(categoryId, owner);
 
@@ -93,9 +87,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public void deleteCategory(UUID categoryId, String ownerEmail) {
-        User owner = userService.findOneUserByEmail(ownerEmail);
-
+    public void deleteCategory(UUID categoryId, User owner) {
         Category category = categoryRepository.getByIdAndOwner(categoryId, owner);
         if (category == null) {
             throw new NotFound("Category");

@@ -31,7 +31,7 @@ public class TransactionService {
     public Transaction createNewTransaction (User owner, CreateTransactionRequest createTransactionRequest) {
         Category category= categoryService.getById(createTransactionRequest.getCategoryId(), owner);
         if (category == null) throw new NotFound("Category");
-        Wallet wallet = walletService.findByWalletId(createTransactionRequest.getWalletId(), owner.getId());
+        Wallet wallet = walletService.findByWalletId(createTransactionRequest.getWalletId(), owner);
         if (wallet == null) throw new NotFound("Wallet");
 
         Transaction newTransaction = Transaction.builder()
@@ -60,7 +60,7 @@ public class TransactionService {
         }
 
         if (updateTransactionRequest.getWalletId() != null) {
-            Wallet wallet = walletService.findByWalletId(updateTransactionRequest.getWalletId(), owner.getId());
+            Wallet wallet = walletService.findByWalletId(updateTransactionRequest.getWalletId(), owner);
             if (wallet == null) throw new NotFound("Wallet");
             transaction.setWallet(wallet);
         }

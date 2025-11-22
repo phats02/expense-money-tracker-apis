@@ -19,8 +19,8 @@ public class WalletService {
     @Autowired
     UserService userService;
 
-    public List<Wallet> findByOwnerId(UUID ownerId) {
-        return walletRepository.findByOwner(ownerId);
+    public List<Wallet> findByOwnerId(User owner) {
+        return walletRepository.findByOwner(owner);
     }
 
     public Boolean isWalletTitleExist(UUID ownerId, String walletName) {
@@ -40,8 +40,8 @@ public class WalletService {
         return walletRepository.save(wallet);
     }
 
-    public Wallet findByWalletId(UUID walletId, UUID ownerId) {
-        return walletRepository.findByIdAndOwner(walletId, ownerId);
+    public Wallet findByWalletId(UUID walletId, User owner) {
+        return walletRepository.findByIdAndOwner(walletId, owner);
     }
 
     public Wallet updateWallet(Wallet wallet) {

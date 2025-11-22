@@ -24,14 +24,14 @@ public class CategoryController {
 
     @GetMapping("")
     public SuccessResponse<List<Category>> getAllCategory (@AuthenticationPrincipal CustomUserDetail customUserDetail){
-        return new SuccessResponse<>(categoryService.getByOwnerEmail(customUserDetail.getUsername()));
+        return new SuccessResponse<>(categoryService.getByOwnerEmail(customUserDetail.getUser()));
     }
 
     @PostMapping("")
     public SuccessResponse<Category> createNewCategory(@AuthenticationPrincipal CustomUserDetail customUserDetail,
                                                        @Valid @RequestBody CreateCategoryRequest createCategoryRequest) {
         return new SuccessResponse<>(
-                categoryService.createNewCategory(createCategoryRequest, customUserDetail.getUsername())
+                categoryService.createNewCategory(createCategoryRequest, customUserDetail.getUser())
         );
     }
 
@@ -39,13 +39,13 @@ public class CategoryController {
     public SuccessResponse<Category> editCategory(@PathVariable UUID id,
                                                   @AuthenticationPrincipal CustomUserDetail customUserDetail,
                                                   @Valid @RequestBody UpdateCategoryRequest updateCategoryRequest) {
-        return new SuccessResponse<>(categoryService.updateCategory(id, updateCategoryRequest, customUserDetail.getUsername()));
+        return new SuccessResponse<>(categoryService.updateCategory(id, updateCategoryRequest, customUserDetail.getUser()));
     }
 
     @DeleteMapping("/{id}")
     public SuccessResponse<Object> deleteCategory(@PathVariable UUID id,
                                                   @AuthenticationPrincipal CustomUserDetail customUserDetail) {
-        categoryService.deleteCategory(id, customUserDetail.getUsername());
+        categoryService.deleteCategory(id, customUserDetail.getUser());
 
         return new SuccessResponse<>(null);
     }

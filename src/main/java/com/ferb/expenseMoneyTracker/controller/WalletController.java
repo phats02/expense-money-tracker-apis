@@ -30,7 +30,7 @@ public class WalletController {
 
     @GetMapping("")
     public SuccessResponse<List<Wallet>> getAllWalletsByUserId(@AuthenticationPrincipal CustomUserDetail userDetail) {
-        return new SuccessResponse<>(walletService.findByOwnerId(userDetail.getUserId()));
+        return new SuccessResponse<>(walletService.findByOwnerId(userDetail.getUser()));
     };
 
     @PostMapping("")
@@ -54,7 +54,7 @@ public class WalletController {
     public SuccessResponse<Wallet> updateWallet(@PathVariable UUID id,
                                                  @AuthenticationPrincipal CustomUserDetail userDetail,
                                                  @Valid @RequestBody UpdateWalletRequest updateWalletRequest) {
-        Wallet wallet = walletService.findByWalletId(id, userDetail.getUserId());
+        Wallet wallet = walletService.findByWalletId(id, userDetail.getUser());
 
         if (wallet == null) {
             throw new NotFound("Wallet");
@@ -84,7 +84,7 @@ public class WalletController {
     @DeleteMapping("/{id}")
     public SuccessResponse<Object> deleteWallet(@PathVariable UUID id,
                                                 @AuthenticationPrincipal CustomUserDetail userDetail) {
-        Wallet wallet = walletService.findByWalletId(id, userDetail.getUserId());
+        Wallet wallet = walletService.findByWalletId(id, userDetail.getUser());
 
         if (wallet == null) {
             throw new NotFound("Wallet");
