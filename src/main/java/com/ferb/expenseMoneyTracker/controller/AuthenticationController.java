@@ -56,6 +56,7 @@ public class AuthenticationController {
         User newUserInfo = User.builder()
                 .email(signupByPasswordRequest.getEmail())
                 .password(passwordEncoder.encode(signupByPasswordRequest.getPassword()))
+                .timezone(signupByPasswordRequest.getTimezone())
                 .signUpMethod(SignUpMethod.password)
                 .build();
 

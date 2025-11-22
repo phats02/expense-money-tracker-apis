@@ -1,6 +1,7 @@
 package com.ferb.expenseMoneyTracker.dto;
 
 import com.ferb.expenseMoneyTracker.annotations.ToLowerCase;
+import com.ferb.expenseMoneyTracker.annotations.ValidTimeZone;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -16,4 +17,9 @@ public class SignupByPasswordRequest {
 
     @NotNull
     String password;
+
+    @NotNull
+    @ValidTimeZone
+    String timezone;
+
 }
