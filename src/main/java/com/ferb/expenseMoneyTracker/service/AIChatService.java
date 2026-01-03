@@ -8,6 +8,7 @@ import com.ferb.expenseMoneyTracker.entity.Transaction;
 import com.ferb.expenseMoneyTracker.entity.User;
 import com.ferb.expenseMoneyTracker.entity.Wallet;
 import com.google.genai.types.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+@Slf4j
 @Service
 public class AIChatService {
     @Autowired
@@ -37,12 +39,8 @@ public class AIChatService {
      * Otherwise, it will respond with regular text.
      */
     public AITransactionResponse chat(String prompt, User owner) {
-        // Get user's categories and wallets to provide as function context
-        List<Category> categories = categoryService.getByOwnerEmail(owner);
-        List<Wallet> wallets = walletService.findByOwnerId(owner);
-
-        // If no wallets or categories, can only do regular chat
-        if (wallets.isEmpty() || categories.isEmpty()) {
+        Tool transactionTool = geminiClient.buildAllTools(owner);
+        if (transactionTool == null) {
             String response = geminiClient.generateContent(prompt).text();
             return AITransactionResponse.builder()
                     .success(true)
@@ -51,31 +49,7 @@ public class AIChatService {
                     .build();
         }
 
-        // Build category and wallet data for function declaration
-        List<Map<String, String>> categoryData = categories.stream()
-                .map(cat -> Map.of(
-                        "id", cat.getId().toString(),
-                        "type", cat.getType().name(),
-                        "title", cat.getTitle()
-                ))
-                .toList();
 
-        List<Map<String, String>> walletData = wallets.stream()
-                .map(w -> Map.of(
-                        "id", w.getId().toString(),
-                        "title", w.getTitle()
-                ))
-                .toList();
-
-        // Create the function declaration with user's actual categories and wallets
-        FunctionDeclaration createTransactionFn = GeminiClient.createTransactionFunctionDeclaration(categoryData, walletData);
-
-        // Create tool with the function declaration
-        Tool transactionTool = Tool.builder()
-                .functionDeclarations(List.of(createTransactionFn))
-                .build();
-
-        // System instruction to guide the model
         String systemInstruction = buildSystemInstruction();
 
         // Call Gemini with function calling support
@@ -85,8 +59,10 @@ public class AIChatService {
                 systemInstruction
         );
 
+        log.info(response.toString());
+
         // Check if the model wants to call a function
-        return processResponse(response, owner, categories, wallets);
+        return processResponse(response, owner);
     }
 
     private String buildSystemInstruction() {
@@ -110,8 +86,7 @@ public class AIChatService {
             """.formatted(LocalDate.now().toString());
     }
 
-    private AITransactionResponse processResponse(GenerateContentResponse response, User owner,
-                                                   List<Category> categories, List<Wallet> wallets) {
+    private AITransactionResponse processResponse(GenerateContentResponse response, User owner  ) {
         // Check if there are any candidates
         Optional<List<Candidate>> candidatesOpt = response.candidates();
         if (candidatesOpt.isEmpty() || candidatesOpt.get().isEmpty()) {
@@ -149,7 +124,7 @@ public class AIChatService {
             // Check if this part contains a function call
             if (part.functionCall().isPresent()) {
                 FunctionCall functionCall = part.functionCall().get();
-                return handleFunctionCall(functionCall, owner, categories, wallets);
+                return handleFunctionCall(functionCall, owner);
             }
 
             // If it's a text response
@@ -169,8 +144,7 @@ public class AIChatService {
                 .build();
     }
 
-    private AITransactionResponse handleFunctionCall(FunctionCall functionCall, User owner,
-                                                      List<Category> categories, List<Wallet> wallets) {
+    private AITransactionResponse handleFunctionCall(FunctionCall functionCall, User owner) {
         String functionName = functionCall.name().orElse("");
 
         if (!"create_transaction".equals(functionName)) {
@@ -192,18 +166,8 @@ public class AIChatService {
             UUID walletId = UUID.fromString(getStringArg(args, "walletId"));
             String note = args.containsKey("note") ? getStringArg(args, "note") : null;
 
-            // Find category and wallet names for the response
-            String categoryName = categories.stream()
-                    .filter(c -> c.getId().equals(categoryId))
-                    .map(Category::getTitle)
-                    .findFirst()
-                    .orElse("Unknown");
-
-            String walletName = wallets.stream()
-                    .filter(w -> w.getId().equals(walletId))
-                    .map(Wallet::getTitle)
-                    .findFirst()
-                    .orElse("Unknown");
+            Category category = categoryService.getById(categoryId, owner);
+            Wallet wallet = walletService.findByWalletId(walletId, owner);
 
             // Create the transaction request
             CreateTransactionRequest request = new CreateTransactionRequest();
@@ -222,14 +186,14 @@ public class AIChatService {
                     .title(title)
                     .amount(amount.toString())
                     .date(date.toString())
-                    .categoryName(categoryName)
-                    .walletName(walletName)
+                    .categoryName(category.getTitle())
+                    .walletName(wallet.getTitle())
                     .note(note)
                     .build();
 
             return AITransactionResponse.builder()
                     .success(true)
-                    .message("✅ Transaction created: " + title + " - $" + amount + " (" + categoryName + ")")
+                    .message("✅ Transaction created: " + title + " - $" + amount + " (" + category.getTitle() + ")")
                     .transaction(transaction)
                     .parsedData(parsedData)
                     .functionCalled(true)

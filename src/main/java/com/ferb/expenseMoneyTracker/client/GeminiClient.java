@@ -1,7 +1,13 @@
 package com.ferb.expenseMoneyTracker.client;
 
+import com.ferb.expenseMoneyTracker.entity.Category;
+import com.ferb.expenseMoneyTracker.entity.User;
+import com.ferb.expenseMoneyTracker.entity.Wallet;
+import com.ferb.expenseMoneyTracker.service.CategoryService;
+import com.ferb.expenseMoneyTracker.service.WalletService;
 import com.google.genai.Client;
 import com.google.genai.types.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,6 +17,12 @@ import java.util.Map;
 public class GeminiClient {
     private final Client client;
     private final String modelName = "gemini-2.5-flash";
+
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    WalletService walletService;
 
     public GeminiClient() {
         try {
@@ -43,22 +55,22 @@ public class GeminiClient {
     /**
      * Create a function declaration for the transaction creation tool
      */
-    public static FunctionDeclaration createTransactionFunctionDeclaration(
-            List<Map<String, String>> categories,
-            List<Map<String, String>> wallets
+    public FunctionDeclaration createTransactionFunctionDeclaration(
+            List<Category> categories,
+            List<Wallet> wallets
     ) {
         // Build enum values for categoryId and walletId based on user's data
         StringBuilder categoryDescription = new StringBuilder("The UUID of the category. Available categories: ");
-        for (Map<String, String> cat : categories) {
-            categoryDescription.append("\n- ").append(cat.get("id"))
-                    .append(" (").append(cat.get("type")).append("): ")
-                    .append(cat.get("title"));
+        for (Category cat : categories) {
+            categoryDescription.append("\n- ").append(cat.getId())
+                    .append(" (").append(cat.getType()).append("): ")
+                    .append(cat.getTitle());
         }
 
         StringBuilder walletDescription = new StringBuilder("The UUID of the wallet. Available wallets: ");
-        for (Map<String, String> wallet : wallets) {
-            walletDescription.append("\n- ").append(wallet.get("id"))
-                    .append(": ").append(wallet.get("title"));
+        for (Wallet wallet : wallets) {
+            walletDescription.append("\n- ").append(wallet.getId())
+                    .append(": ").append(wallet.getTitle());
         }
 
         return FunctionDeclaration.builder()
@@ -95,6 +107,17 @@ public class GeminiClient {
                         ))
                         .required(List.of("title", "amount", "date", "categoryId", "walletId"))
                         .build())
+                .build();
+    }
+
+    public Tool buildAllTools(User user){
+        List<Category> categories = categoryService.getByOwnerEmail(user);
+        List<Wallet> wallets = walletService.findByOwnerId(user);
+
+        if (categories.isEmpty() || wallets.isEmpty()) return null;
+
+        return Tool.builder().functionDeclarations(List.of(
+                createTransactionFunctionDeclaration(categories, wallets)))
                 .build();
     }
 
