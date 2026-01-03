@@ -1,0 +1,17 @@
+# Development profile - local Docker with Compose
+spring:
+  datasource:
+    url: jdbc:postgresql://host.docker.internal:5432/express-money-tracker-db
+    username: admin
+    password: admin
+  jpa:
+    show-sql: true
+
+app:
+  jwtSecret: lucky_7seven_lucky_7seven_lucky_7seven_lucky_7seven
+
+org:
+  slf4j:
+    simpleLogger:
+      defaultLogLevel: debug
+

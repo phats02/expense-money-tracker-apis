@@ -1,0 +1,32 @@
+# Production profile - Azure App Service
+# All sensitive values come from Azure App Settings (environment variables)
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+app:
+  jwtSecret: ${APP_JWTSECRET}
+
+# Google OAuth (if used)
+google:
+  api-key: ${GOOGLE_API_KEY:}
+  client-id: ${GOOGLE_CLIENT_ID:}
+  client-secret: ${GOOGLE_CLIENT_SECRET:}
+
+org:
+  slf4j:
+    simpleLogger:
+      defaultLogLevel: info
+
+# Production-specific settings
+server:
+  error:
+    include-stacktrace: never
+    include-message: never
+

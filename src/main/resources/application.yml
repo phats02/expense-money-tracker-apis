@@ -1,17 +1,27 @@
-app:
-  jwtSecret: lucky_7seven_lucky_7seven_lucky_7seven_lucky_7seven
-org:
-  slf4j:
-    simpleLogger:
-      defaultLogLevel: debug
+# Common settings for all environments
 spring:
   application:
     name: ExpenseMoneyTracker
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: ${SHOW_SQL:false}
+
+# Default profile (will be overridden by environment-specific profiles)
+---
+spring:
+  config:
+    activate:
+      on-profile: default
   datasource:
     url: jdbc:postgresql://localhost:5432/express-money-tracker-db
     username: admin
     password: admin
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+
+app:
+  jwtSecret: dev-secret-not-for-production
+
+org:
+  slf4j:
+    simpleLogger:
+      defaultLogLevel: debug

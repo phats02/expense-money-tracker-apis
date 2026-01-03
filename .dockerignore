@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+*.iml
+.vscode
+
+# Build artifacts
+target/
+
+# Docker
+Dockerfile
+docker-compose*.yml
+compose.yml
+
+# Documentation
+*.md
+!README.md
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
