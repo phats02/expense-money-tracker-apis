@@ -68,7 +68,9 @@ az webapp config appsettings set \
   --resource-group $RESOURCE_GROUP \
   --settings \
     SPRING_PROFILES_ACTIVE="prod" \
-    WEBSITES_PORT=8080
+    WEBSITES_PORT=8080 \
+    APPLICATIONINSIGHTS_ENABLE_AGENT="false" \
+    JAVA_TOOL_OPTIONS=""
 
 # ============================================
 # Step 6: Restart the App

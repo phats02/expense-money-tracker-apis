@@ -30,5 +30,8 @@ COPY --from=builder /app/target/*.jar app.jar
 # Expose port 8080 (Azure App Service expects this)
 EXPOSE 8080
 
+# Unset Azure's default JAVA_TOOL_OPTIONS to avoid agent conflicts
+ENV JAVA_TOOL_OPTIONS=""
+
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xshare:off", "-jar", "app.jar"]
