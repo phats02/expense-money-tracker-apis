@@ -1,6 +1,6 @@
 package com.ferb.expenseMoneyTracker.filter;
 
-import com.ferb.expenseMoneyTracker.provider.JwtTokenProvider;
+import com.ferb.expenseMoneyTracker.provider.JwtAccessTokenProvider;
 import com.ferb.expenseMoneyTracker.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,7 +22,7 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtAccessTokenProvider jwtAccessTokenProvider;
 
     @Autowired
     private UserService userService;
@@ -34,8 +34,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String jwt =getJwtFromRequest(request);
 
-        if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-            String userEmail = jwtTokenProvider.getUserIdFromJWT(jwt);
+        if (StringUtils.hasText(jwt) && jwtAccessTokenProvider.validateToken(jwt)) {
+            String userEmail = jwtAccessTokenProvider.getUserIdFromJWT(jwt);
 
             UserDetails userDetails = userService.loadUserByUsername(userEmail);
             if (userDetails != null) {

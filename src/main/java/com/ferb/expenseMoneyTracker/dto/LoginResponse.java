@@ -1,8 +1,13 @@
 package com.ferb.expenseMoneyTracker.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.*;
 
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class LoginResponse  {
-    public String token;
+    @NonNull
+    private String accessToken;
+    private String refreshToken;
 }
