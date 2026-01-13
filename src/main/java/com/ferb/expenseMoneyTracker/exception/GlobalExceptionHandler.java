@@ -26,13 +26,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JwtException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse<String> handleJwtException(JwtException ex) {
-        return new ErrorResponse<>(ErrorType.INVALID_AUTH_TOKEN, ex.getMessage());
+        return new ErrorResponse<>(ErrorType.INVALID_AUTH_TOKEN, "JWT token is invalid or expired");
     }
 
     @ExceptionHandler(MalformedJwtException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse<String> handleMalformedJwtException(MalformedJwtException ex) {
-        return new ErrorResponse<>(ErrorType.MALFORMED_TOKEN, ex.getMessage());
+        return new ErrorResponse<>(ErrorType.MALFORMED_TOKEN, "JWT token is invalid");
     }
 
     @ExceptionHandler(AccessDeniedException.class)

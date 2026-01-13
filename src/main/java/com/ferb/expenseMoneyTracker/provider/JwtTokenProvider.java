@@ -2,6 +2,7 @@ package com.ferb.expenseMoneyTracker.provider;
 
 import com.ferb.expenseMoneyTracker.dto.JwtSubject;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 public abstract class JwtTokenProvider<T> {
@@ -22,7 +24,6 @@ public abstract class JwtTokenProvider<T> {
 
     public JwtTokenProvider(long expirationMS,  String jwtSecret) {
         this.expirationMS = expirationMS;
-
         this.jwtSecret = jwtSecret;
     }
 
@@ -44,13 +45,20 @@ public abstract class JwtTokenProvider<T> {
                 .compact();
     }
 
-    public String getTokenId(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return JwtSubject.fromString(claims.getSubject(), String.class).getId();
+    public UUID getTokenId(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            return JwtSubject.fromString(claims.getSubject(), String.class).getId();
+        }
+        catch (ExpiredJwtException e) {
+            log.info("run here");
+            return JwtSubject.fromString(e.getClaims().getSubject(), String.class).getId();
+        }
+
     }
 
     public boolean validateToken(String token) {
@@ -64,5 +72,9 @@ public abstract class JwtTokenProvider<T> {
             log.debug("Invalid JWT token: {}", ex.getMessage());
             return false;
         }
+    }
+
+    public Date getTokenExpiration(String token) {
+       return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload().getExpiration();
     }
 }

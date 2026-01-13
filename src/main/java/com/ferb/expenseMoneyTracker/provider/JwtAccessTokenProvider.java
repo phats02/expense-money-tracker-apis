@@ -4,6 +4,7 @@ import com.ferb.expenseMoneyTracker.dto.CustomUserDetail;
 import com.ferb.expenseMoneyTracker.dto.JwtSubject;
 import com.ferb.expenseMoneyTracker.properties.CustomProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @DependsOn("customProperties")
 public class JwtAccessTokenProvider extends JwtTokenProvider<String> {
-    private static final long JWT_EXPIRATION_MS = 3_600_000L; // 1 hour
+    private static final long JWT_EXPIRATION_MS = 36_000_000L; // 1 hour
 
 
     public JwtAccessTokenProvider() {
@@ -30,12 +31,19 @@ public class JwtAccessTokenProvider extends JwtTokenProvider<String> {
     }
 
     public String getUserIdFromJWT(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(this.getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(this.getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
 
-        return JwtSubject.fromString(claims.getSubject(), String.class).getData();
+            return JwtSubject.fromString(claims.getSubject(), String.class).getData();
+        }
+        catch (ExpiredJwtException e) {
+            return JwtSubject.fromString(e.getClaims().getSubject(), String.class).getData();
+
+        }
+
     }
 }

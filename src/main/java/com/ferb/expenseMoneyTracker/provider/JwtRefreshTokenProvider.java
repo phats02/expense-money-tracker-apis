@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @DependsOn("customProperties")
 public class JwtRefreshTokenProvider extends JwtTokenProvider<String>{
 
-    private static final long JWT_EXPIRATION_MS = 86_400_000L; // 1 week
+    private static final long JWT_EXPIRATION_MS = 604_800_000L; // 1 week
     @Autowired
     private JwtAccessTokenProvider jwtAccessTokenProvider;
 
@@ -21,25 +23,25 @@ public class JwtRefreshTokenProvider extends JwtTokenProvider<String>{
     }
 
     public String generateToken(String accessToken) {
-        String accessTokenId = jwtAccessTokenProvider.getTokenId(accessToken);
+        UUID accessTokenId = jwtAccessTokenProvider.getTokenId(accessToken);
 
-        return super.generateToken(accessTokenId);
+        return super.generateToken(accessTokenId.toString());
     }
 
-    public String getAccessTokenId(String refreshToken) {
+    public UUID getAccessTokenId(String refreshToken) {
         Claims claims = Jwts.parser()
                 .verifyWith(this.getSigningKey())
                 .build()
                 .parseSignedClaims(refreshToken)
                 .getPayload();
 
-        return JwtSubject.fromString(claims.getSubject(), String.class).getData();
+        return JwtSubject.fromString(claims.getSubject(), UUID.class).getData();
     }
 
     public boolean isTokenPairValid(String accessToken, String refreshToken) {
-        String accessTokenId = jwtAccessTokenProvider.getTokenId(accessToken);
+        UUID accessTokenId = jwtAccessTokenProvider.getTokenId(accessToken);
 
-        String accessTokenIdInRefreshToken = this.getAccessTokenId(refreshToken);
+        UUID accessTokenIdInRefreshToken = this.getAccessTokenId(refreshToken);
 
         return accessTokenId.equals(accessTokenIdInRefreshToken);
     }

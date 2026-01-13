@@ -5,6 +5,8 @@ spring:
     password: admin
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: update
 
 app:
   jwtSecret: lucky_7seven_lucky_7seven_lucky_7

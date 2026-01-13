@@ -15,7 +15,7 @@ import java.util.UUID;
 public class JwtSubject<T> {
 
     @JsonProperty("id")
-    private String id = UUID.randomUUID().toString();
+    private UUID id = UUID.randomUUID();
 
     @JsonProperty("subject")
     @NonNull
