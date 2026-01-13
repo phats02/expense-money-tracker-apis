@@ -12,6 +12,7 @@ spring:
 
 app:
   jwtSecret: ${APP_JWTSECRET}
+  jwtRefreshSecret: ${APP_JWTREFRESHSECRET}
 
 # Google OAuth (if used)
 google:
