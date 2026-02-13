@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/express-money-tracker-db
-    username: admin
+    username: postgres
     password: admin
   jpa:
     show-sql: true
