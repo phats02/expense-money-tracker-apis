@@ -11,6 +11,7 @@ spring:
 app:
   jwtSecret: lucky_7seven_lucky_7seven_lucky_7
   jwtRefreshSecret: ${APP_JWTREFRESHSECRET:}
+  frontendBaseUrl: http://localhost:3000
 
 server:
   port: 8081

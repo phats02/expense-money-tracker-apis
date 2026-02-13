@@ -11,6 +11,8 @@ public class CustomProperties {
     private static String jwtSecret;
     @Getter
     private static String jwtRefreshSecret;
+    @Getter
+    private static  String frontendBaseUrl;
 
     public void setJwtSecret(String jwtSecret) {
         CustomProperties.jwtSecret = jwtSecret;
@@ -20,4 +22,5 @@ public class CustomProperties {
         CustomProperties.jwtRefreshSecret = jwtRefreshSecret;
     }
 
+    public void setFrontendBaseUrl(String frontendBaseUrl) { CustomProperties.frontendBaseUrl = frontendBaseUrl;}
 }
