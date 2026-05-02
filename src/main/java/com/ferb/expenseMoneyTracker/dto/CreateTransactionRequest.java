@@ -1,6 +1,7 @@
 package com.ferb.expenseMoneyTracker.dto;
 
-import com.ferb.expenseMoneyTracker.entity.Wallet;
+import com.ferb.expenseMoneyTracker.annotations.ValidEnum;
+import com.ferb.expenseMoneyTracker.enums.TransactionType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -29,4 +30,8 @@ public class CreateTransactionRequest {
 
     @NotNull
     private String title;
+
+    @NotNull
+    @ValidEnum(enumClass = TransactionType.class)
+    private TransactionType type;
 }

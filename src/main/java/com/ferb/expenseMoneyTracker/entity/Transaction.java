@@ -2,6 +2,7 @@ package com.ferb.expenseMoneyTracker.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.ferb.expenseMoneyTracker.abstracts.Auditable;
+import com.ferb.expenseMoneyTracker.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -29,6 +30,10 @@ public class Transaction extends Auditable {
 
     @Column(nullable = false)
     private String title;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private TransactionType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn( nullable = false)
