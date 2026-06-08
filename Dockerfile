@@ -27,11 +27,8 @@ USER spring:spring
 # Copy the built JAR from builder stage
 COPY --from=builder /app/target/*.jar app.jar
 
-# Expose port 8080 (Azure App Service expects this)
 EXPOSE 8080
 
-# Unset Azure's default JAVA_TOOL_OPTIONS to avoid agent conflicts
-ENV JAVA_TOOL_OPTIONS=""
+ENV SPRING_PROFILES_ACTIVE=prod
 
-# Run the application
-ENTRYPOINT ["java", "-Xshare:off", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
