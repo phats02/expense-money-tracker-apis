@@ -1,4 +1,4 @@
-# Expense Money Tracker   
+# Expense Money Tracker    
 
 A comprehensive expense tracking application built with Spring Boot that helps you manage your finances efficiently with AI-powered assistance.
 
